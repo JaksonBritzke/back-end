@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 
 import org.hibernate.annotations.Formula;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -21,6 +23,7 @@ public class ItemNotaFiscal {
     @GeneratedValue
     private Long id;
 
+    @JsonBackReference
     @ManyToOne
     private NotaFiscal notaFiscal;
 
