@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import com.teste.model.ItemNotaFiscal;
 import com.teste.model.NotaFiscal;
+import com.teste.model.dto.ItemNotaFiscalDTO;
 import com.teste.model.dto.NotaFiscalDTO;
 import com.teste.repository.FornecedorRepository;
 import com.teste.repository.NotaFiscalRepository;
@@ -99,8 +100,9 @@ public class NotaFiscalServiceImpl implements NotaFiscalService {
                 nota.getDataEmissao(),
                 nota.getFornecedor().getCodigo(),
                 nota.getValorTotal(),
-                null // Temporarily omitting items for simplicity
-        );
+                nota.getItens().stream()
+                        .map(this::toItemDTO)
+                        .collect(Collectors.toList()));
     }
 
     private NotaFiscal toNotaFiscal(NotaFiscalDTO dto) {
@@ -109,21 +111,29 @@ public class NotaFiscalServiceImpl implements NotaFiscalService {
         nota.setDataEmissao(dto.getDataEmissao());
         nota.setFornecedor(fornecedorRepository.findById(dto.getFornecedorId()));
         nota.setValorTotal(dto.getValorTotal());
-        
+
         nota.setItens(
-            dto.getItens().stream()
-                .map(itemDto -> {
-                    ItemNotaFiscal item = new ItemNotaFiscal();
-                    item.setId(itemDto.getId());
-                    item.setProduto(produtoRepository.findById(itemDto.getProdutoId()));
-                    item.setValorUnitario(itemDto.getValorUnitario());
-                    item.setQuantidade(itemDto.getQuantidade());
-                    item.setNotaFiscal(nota);
-                    return item;
-                })
-                .collect(Collectors.toList())
-        );
-        
+                dto.getItens().stream()
+                        .map(itemDto -> {
+                            ItemNotaFiscal item = new ItemNotaFiscal();
+                            item.setId(itemDto.getId());
+                            item.setProduto(produtoRepository.findById(itemDto.getProdutoId()));
+                            item.setValorUnitario(itemDto.getValorUnitario());
+                            item.setQuantidade(itemDto.getQuantidade());
+                            item.setNotaFiscal(nota);
+                            return item;
+                        })
+                        .collect(Collectors.toList()));
+
         return nota;
+    }
+
+    private ItemNotaFiscalDTO toItemDTO(ItemNotaFiscal item) {
+        return new ItemNotaFiscalDTO(
+                item.getId(),
+                item.getProduto().getCodigo(),
+                item.getValorUnitario(),
+                item.getQuantidade(),
+                item.getValorTotal());
     }
 }

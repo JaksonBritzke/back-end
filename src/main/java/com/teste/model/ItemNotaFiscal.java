@@ -6,6 +6,7 @@ import org.hibernate.annotations.Formula;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -29,9 +30,11 @@ public class ItemNotaFiscal {
 
     @ManyToOne
     private Produto produto;
-
+    
+    @Column(name = "valor_unitario")
     private BigDecimal valorUnitario;
 
+    @Column(name = "quantidade")
     private Integer quantidade;
 
     @Formula("valor_unitario * quantidade")

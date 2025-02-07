@@ -2,12 +2,15 @@ package com.teste.controller;
 
 import static jakarta.ws.rs.core.Response.Status.CREATED;
 
+import java.util.List;
+
 import com.teste.model.dto.NotaFiscalDTO;
 import com.teste.service.NotaFiscalService;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
@@ -39,6 +42,11 @@ public class NotaFiscalController {
     @Path("/{numero}")
     public void excluir(@PathParam("numero") long numero) {
         service.deletar(numero);
+    }
+
+    @GET
+    public List<NotaFiscalDTO> listar() {
+        return service.listarTodas();
     }
 
 }
