@@ -73,4 +73,26 @@ public class ProdutoServiceImpl implements ProdutoService {
                 dto.getSituacao(),
                 null);
     }
+
+    @Override
+    public ProdutoDTO buscarPorDescricao(String descricao) {
+        return toDTO(repository.findByDescricao(descricao)
+        .orElseThrow(() -> new NotFoundException("Produto não encontrado")));
+    }
+
+    @Override
+    public List<ProdutoDTO> buscarPorDescricaoLike(String descricao) {
+        if (descricao == null || descricao.trim().isEmpty()) {
+            throw new IllegalArgumentException("Descrição não pode ser nula ou vazia");
+        }
+        List<Produto> produtos = repository.findByDescricaoLike(descricao);
+        if (produtos.isEmpty()) {
+
+            throw new NotFoundException("Nenhum produto encontrado com a descrição fornecida");
+        }
+
+        return produtos.stream()
+                       .map(this::toDTO)
+                       .collect(Collectors.toList());
+    }
 }

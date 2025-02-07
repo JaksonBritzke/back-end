@@ -4,7 +4,6 @@ import static jakarta.ws.rs.core.Response.Status.CREATED;
 
 import java.util.List;
 
-import com.teste.model.Produto;
 import com.teste.model.dto.ProdutoDTO;
 import com.teste.service.ProdutoService;
 
@@ -24,7 +23,7 @@ import jakarta.ws.rs.core.Response;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class ProdutoController {
-    
+
     @Inject
     ProdutoService service;
 
@@ -35,21 +34,33 @@ public class ProdutoController {
 
     @GET
     @Path("/{id}")
-    public ProdutoDTO buscar(@PathParam("id") Long id) {
+    public ProdutoDTO buscarPorId(@PathParam("id") Long id) {
         return service.buscarPorId(id);
+    }
+
+    @GET
+    @Path("/descricao/{descricao}")
+    public ProdutoDTO buscarPorDescricao(@PathParam("descricao") String descricao) {
+        return service.buscarPorDescricao(descricao);
+    }
+
+    @GET
+    @Path("/descricao/like/{descricao}")
+    public List<ProdutoDTO> buscarPorDescricaoLike(@PathParam("descricao") String descricao) {
+        return service.buscarPorDescricaoLike(descricao);
     }
 
     @POST
     public Response criar(ProdutoDTO dto) {
-       return Response.status(CREATED)
-               .entity(service.salvar(dto))
-               .build();
+        return Response.status(CREATED)
+                .entity(service.salvar(dto))
+                .build();
     }
-    
+
     @PUT
     @Path("/{id}")
     public ProdutoDTO atualizar(@PathParam("id") Long id, ProdutoDTO dto) {
-       return service.atualizar(id, dto);
+        return service.atualizar(id, dto);
     }
 
     @DELETE

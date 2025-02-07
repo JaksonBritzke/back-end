@@ -9,6 +9,10 @@ public interface ProdutoService {
 
     ProdutoDTO buscarPorId(Long id);
 
+    ProdutoDTO buscarPorDescricao(String descricao);
+
+    List<ProdutoDTO> buscarPorDescricaoLike(String descricao);
+
     ProdutoDTO salvar(ProdutoDTO dto);
 
     ProdutoDTO atualizar(Long id, ProdutoDTO dto);
