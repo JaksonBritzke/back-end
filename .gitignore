@@ -14,9 +14,11 @@ bin/
 
 # IntelliJ
 .idea
+.vscode/
 *.ipr
 *.iml
 *.iws
+
 
 # NetBeans
 nb-configuration.xml
