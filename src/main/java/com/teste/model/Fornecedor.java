@@ -1,7 +1,6 @@
 package com.teste.model;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import com.teste.model.enums.SituacaoFornecedor;
 
@@ -11,7 +10,6 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -39,7 +37,4 @@ public class Fornecedor {
     private SituacaoFornecedor situacao = SituacaoFornecedor.ATIVO;
 
     private LocalDate dataBaixa;
-
-    @OneToMany(mappedBy = "fornecedor")
-    private List<NotaFiscal> notas;
 }
