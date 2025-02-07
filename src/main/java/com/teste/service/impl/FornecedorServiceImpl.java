@@ -3,6 +3,7 @@ package com.teste.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.teste.exception.BusinessException;
 import com.teste.model.Fornecedor;
 import com.teste.model.dto.FornecedorDTO;
 import com.teste.repository.FornecedorRepository;
@@ -35,6 +36,7 @@ public class FornecedorServiceImpl implements FornecedorService {
     @Transactional
     @Override
     public FornecedorDTO salvar(FornecedorDTO dto) {
+        validarCamposUnicos(dto);
         Fornecedor fornecedor = toFornecedor(dto);
         repository.persist(fornecedor);
         return toDTO(fornecedor);
@@ -93,18 +95,24 @@ public class FornecedorServiceImpl implements FornecedorService {
     }
 
     @Override
-    public List<FornecedorDTO> buscarPorDescricaoLike(String descricao) {
-        if (descricao == null || descricao.trim().isEmpty()) {
+    public List<FornecedorDTO> buscarPorDescricaoLike(String razaoSocial) {
+        if (razaoSocial == null || razaoSocial.trim().isEmpty()) {
             throw new IllegalArgumentException("Descrição não pode ser nula ou vazia");
         }
-        List<Fornecedor> fornecedores = repository.findByDescricaoLike(descricao);
+        List<Fornecedor> fornecedores = repository.findByRazaoSocialLike(razaoSocial);
         if (fornecedores.isEmpty()) {
 
-            throw new NotFoundException("Nenhum fornecedor encontrado com a descrição fornecida");
+            throw new NotFoundException("Nenhum fornecedor encontrado com a Razão Social fornecida");
         }
 
         return fornecedores.stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    private void validarCamposUnicos(FornecedorDTO dto) {
+        if (repository.count("cnpj", dto.getCnpj()) > 0) {
+            throw new BusinessException("CNPJ já cadastrado");
+        }
     }
 }

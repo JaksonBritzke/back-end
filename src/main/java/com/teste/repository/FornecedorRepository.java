@@ -30,11 +30,15 @@ public class FornecedorRepository implements PanacheRepository<Fornecedor> {
         return find("descricao", descricao).firstResultOptional();
     }
 
-    public List<Fornecedor> findByDescricaoLike(String descricao) {
-        if (descricao == null || descricao.trim().isEmpty()) {
-            throw new IllegalArgumentException("Descrição não pode ser nula ou vazia");
+    public List<Fornecedor> findByRazaoSocialLike(String razaoSocial) {
+        if (razaoSocial == null || razaoSocial.trim().isEmpty()) {
+            throw new IllegalArgumentException("O Campo razão social não pode ser nula ou vazia");
         }
-        return find("descricao LIKE ?1", "%" + descricao + "%").list();
+        return find("razaoSocial LIKE ?1", "%" + razaoSocial + "%").list();
+    }
+
+    public boolean existsByCnpj(String cnpj) {
+        return count("cnpj", cnpj) > 0;
     }
 
 }

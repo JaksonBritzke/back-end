@@ -45,9 +45,9 @@ public class FornecedorController {
     }
 
     @GET
-    @Path("/descricao/like/{descricao}")
-    public List<FornecedorDTO> buscarPorDescricaoLike(@PathParam("descricao") String descricao) {
-        return service.buscarPorDescricaoLike(descricao);
+    @Path("/descricao/like/{razaoSocial}")
+    public List<FornecedorDTO> buscarPorDescricaoLike(@PathParam("razaoSocial") String razaoSocial) {
+        return service.buscarPorDescricaoLike(razaoSocial);
     }
 
     @POST
