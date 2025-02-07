@@ -27,6 +27,8 @@ public class Fornecedor {
 
     private String email;
 
+    private String endereco;
+
     private String telefone;
 
     @Column(unique = true)

@@ -51,6 +51,7 @@ public class FornecedorServiceImpl implements FornecedorService {
         existente.setDataBaixa(dto.getDataBaixa());
         existente.setEmail(dto.getEmail());
         existente.setRazaoSocial(dto.getRazaoSocial());
+        existente.setEndereco(dto.getEndereco());
         existente.setTelefone(dto.getTelefone());
         existente.setSituacao(dto.getSituacao());
         return toDTO(existente);
@@ -72,6 +73,7 @@ public class FornecedorServiceImpl implements FornecedorService {
                 fornecedor.getRazaoSocial(),
                 fornecedor.getEmail(),
                 fornecedor.getTelefone(),
+                fornecedor.getEndereco(),
                 fornecedor.getCnpj(),
                 fornecedor.getSituacao(),
                 fornecedor.getDataBaixa());
@@ -83,6 +85,7 @@ public class FornecedorServiceImpl implements FornecedorService {
                 dto.getRazaoSocial(),
                 dto.getEmail(),
                 dto.getTelefone(),
+                dto.getEndereco(),
                 dto.getCnpj(),
                 dto.getSituacao(),
                 dto.getDataBaixa());

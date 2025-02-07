@@ -15,6 +15,7 @@ public class FornecedorDTO {
     private Long codigo;
     private String razaoSocial;
     private String email;
+    private String endereco;
     private String telefone;
     private String cnpj;
     private SituacaoFornecedor situacao;

@@ -1,0 +1,18 @@
+package com.teste.model.dto;
+
+import java.math.BigDecimal;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class ItemNotaFiscalDTO {
+    private Long id;
+    private Long produtoId;
+    private BigDecimal valorUnitario;
+    private Integer quantidade;
+    private BigDecimal valorTotal;
+}

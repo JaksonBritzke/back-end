@@ -6,6 +6,7 @@ import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -19,14 +20,15 @@ import lombok.NoArgsConstructor;
 @Entity
 public class NotaFiscal {
     @Id
-    private String numero;
+    @GeneratedValue
+    private Long id;
+
+    private Long numero;
 
     private LocalDateTime dataEmissao;
 
     @ManyToOne
     private Fornecedor fornecedor;
-
-    private String endereco;
 
     private BigDecimal valorTotal;
 
