@@ -7,11 +7,19 @@ import com.teste.model.Produto;
 
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
 
 @ApplicationScoped
 public class ProdutoRepository implements PanacheRepository<Produto> {
+    @Inject
+    EntityManager em;
+
     public boolean temMovimentacao(Long codigo) {
-        return find("produto.codigo", codigo).count() > 0;
+        String query = "SELECT CASE WHEN COUNT(i) > 0 THEN true ELSE false END FROM ItemNotaFiscal i WHERE i.produto.codigo = :codigo";
+        return em.createQuery(query, Boolean.class)
+                .setParameter("codigo", codigo)
+                .getSingleResult();
     }
 
     public Optional<Produto> findByDescricao(String descricao) {
