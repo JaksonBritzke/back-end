@@ -96,6 +96,7 @@ public class NotaFiscalServiceImpl implements NotaFiscalService {
 
     private NotaFiscalDTO toDTO(NotaFiscal nota) {
         return new NotaFiscalDTO(
+                nota.getId(),
                 nota.getNumero(),
                 nota.getDataEmissao(),
                 nota.getFornecedor().getCodigo(),

@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NotaFiscalDTO {
+    private Long id;
     private Long numero;
     private LocalDateTime dataEmissao;
     private Long fornecedorId;
