@@ -34,7 +34,7 @@ public class FornecedorRepository implements PanacheRepository<Fornecedor> {
         if (razaoSocial == null || razaoSocial.trim().isEmpty()) {
             throw new IllegalArgumentException("O Campo razão social não pode ser nula ou vazia");
         }
-        return find("razaoSocial LIKE ?1", "%" + razaoSocial + "%").list();
+        return find("razaoSocial ILIKE ?1", "%" + razaoSocial.trim() + "%").list();
     }
 
     public boolean existsByCnpj(String cnpj) {

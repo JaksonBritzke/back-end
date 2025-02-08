@@ -33,6 +33,6 @@ public class ProdutoRepository implements PanacheRepository<Produto> {
         if (descricao == null || descricao.trim().isEmpty()) {
             throw new IllegalArgumentException("Descrição não pode ser nula ou vazia");
         }
-        return find("descricao LIKE ?1", "%" + descricao + "%").list();
+        return find("descricao ILIKE ?1", "%" + descricao.trim() + "%").list();
     }
 }
