@@ -3,7 +3,6 @@ package com.teste.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.teste.exception.BusinessException;
 import com.teste.model.Fornecedor;
 import com.teste.model.dto.FornecedorDTO;
 import com.teste.repository.FornecedorRepository;
@@ -115,7 +114,7 @@ public class FornecedorServiceImpl implements FornecedorService {
 
     private void validarCamposUnicos(FornecedorDTO dto) {
         if (repository.count("cnpj", dto.getCnpj()) > 0) {
-            throw new BusinessException("CNPJ já cadastrado");
+            throw new BadRequestException("CNPJ já cadastrado");
         }
     }
 }

@@ -70,8 +70,7 @@ public class ProdutoServiceImpl implements ProdutoService {
         return new Produto(
                 dto.getCodigo(),
                 dto.getDescricao(),
-                dto.getSituacao(),
-                null);
+                dto.getSituacao());
     }
 
     @Override
