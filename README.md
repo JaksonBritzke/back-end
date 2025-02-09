@@ -1,101 +1,98 @@
-# Projeto Back-end 
+# Projeto Backend Quarkus
 
-**Importante**: Esta aplicação depende do Backend desenvolvido em Quarkus estar em execução.
-
-Este projeto foi desenvolvido utilizando Angular 19 e PrimeNG 19 como biblioteca de componentes UI.
+Este projeto foi desenvolvido utilizando Quarkus 3.18.2, PostgreSQL 16.6 e Java 17.
 
 ## Pré-requisitos
 
 Antes de começar, certifique-se de ter instalado em sua máquina:
 
-- Node.js (Recomendada a versão LTS mais recente)
-- NPM (Node Package Manager)
-- Angular CLI versão 19.1.6 ou superior
+- Java 17 (OpenJDK)
+- Apache Maven 3.9.1
+- PostgreSQL 16.6
+- IDE de sua preferência (recomendado VSCode ou IntelliJ IDEA)
 
-Para instalar o Angular CLI globalmente, execute:
+## Configuração do Banco de Dados
 
-```bash
-npm install -g @angular/cli
-```
+1. Instale o PostgreSQL 16.6
+2. Crie um banco de dados chamado `bd_teste`
+3. Configure o usuário e senha como:
+   - Usuário: postgres
+   - Senha: postgres
 
-## Instalação
+Ou altere as configurações no arquivo `application.properties` de acordo com sua instalação.
+
+## Instalação e Execução
 
 1. Clone o repositório do projeto
 2. Navegue até a pasta do projeto
-3. Instale as dependências executando:
+3. Execute o comando:
 
 ```bash
-npm install
+mvn clean install
 ```
 
-## Executando a aplicação
-
-Para iniciar o servidor de desenvolvimento:
+4. Para iniciar a aplicação em modo de desenvolvimento:
 
 ```bash
-npm start
+mvn quarkus:dev
 ```
 
-ou
+A aplicação estará disponível em `http://localhost:8080`
 
-```bash
-ng serve
-```
+## Endpoints e Documentação
 
-A aplicação estará disponível em `http://localhost:4200/`
+A documentação Swagger UI está disponível em:
+- `http://localhost:8080/swagger-ui`
 
-## Scripts disponíveis
+## Principais Dependências
 
-- `npm start` - Inicia o servidor de desenvolvimento
-- `npm run build` - Compila o projeto para produção
-- `npm run watch` - Compila o projeto em modo de observação
-- `npm test` - Executa os testes unitários
-- `npm run serve:ssr:Front-End` - Executa o servidor SSR (Server-Side Rendering)
+O projeto utiliza as seguintes dependências principais:
 
-## Bibliotecas principais
+- Quarkus 3.18.2
+- Hibernate ORM com Panache
+- RESTEasy
+- PostgreSQL JDBC Driver
+- Swagger UI
+- Lombok 1.18.30
 
-O projeto utiliza as seguintes bibliotecas principais:
+## Configurações CORS
 
-- Angular 19.1.0
-- PrimeNG 19.0.6
-- PrimeFlex 3.3.1
-- PrimeIcons 7.0.0
+O backend está configurado para aceitar requisições do frontend Angular que roda em `http://localhost:4200`
+
+## Health Check
+
+Endpoint de verificação de saúde disponível em:
+- `http://localhost:8080/q/health`
 
 ## Desenvolvimento
 
-A aplicação está configurada com:
-
-- TypeScript 5.7.2
-- RxJS 7.8.0
-- Suporte a SSR (Server-Side Rendering)
-- Testes com Jasmine e Karma
+- O projeto usa Java 17
+- Hibernate ORM com modo de geração de banco de dados em `update`
+- Swagger UI sempre incluído
+- CORS configurado para desenvolvimento local
 
 ## Build
 
-Para gerar uma build de produção:
+Para gerar um build de produção:
 
 ```bash
-npm run build
+mvn package
 ```
 
-Os arquivos serão gerados no diretório `dist/`.
-
-## Servidor SSR
-
-Para executar o servidor SSR após o build:
+Para gerar um build nativo:
 
 ```bash
-npm run serve:ssr:Front-End
+mvn package -Pnative
 ```
 
 ## Testes
 
-Para executar os testes unitários:
+Para executar os testes:
 
 ```bash
-npm test
+mvn test
 ```
 
 ---
 *Observação: Projeto desenvolvido para fins de estudo, utilizando configurações simplificadas(Cors x user\password database).*
-*Observação: Certifique-se de manter todas as dependências atualizadas para garantir a melhor compatibilidade e segurança.*
+*Observação: Certifique-se de que o PostgreSQL esteja em execução antes de iniciar a aplicação.*
