@@ -60,12 +60,21 @@ O projeto utiliza as seguintes dependências principais:
 
 O backend está configurado para aceitar requisições do frontend Angular que roda em `http://localhost:4200`
 
+## Testes
+
+Para executar os testes:
+
+```bash
+mvn test
+```
+
 ## Health Check
 
 Endpoint de verificação de saúde disponível em:
 - `http://localhost:8080/q/health`
 
 Para fins de visualização com dados logo ao rodar a aplicação, segue scripts SQL:
+
 ## Dados de Exemplo
 
 ### Scripts para Fornecedores
