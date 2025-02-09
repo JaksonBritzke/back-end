@@ -27,7 +27,4 @@ public class Produto {
     @Column(nullable = false)
     private SituacaoProduto situacao = SituacaoProduto.ATIVO;
 
-    // @JsonManagedReference
-    // @OneToMany(mappedBy = "produto")
-    // private List<ItemNotaFiscal> itens;
 }

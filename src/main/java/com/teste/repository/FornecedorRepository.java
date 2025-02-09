@@ -36,9 +36,4 @@ public class FornecedorRepository implements PanacheRepository<Fornecedor> {
         }
         return find("razaoSocial ILIKE ?1", "%" + razaoSocial.trim() + "%").list();
     }
-
-    public boolean existsByCnpj(String cnpj) {
-        return count("cnpj", cnpj) > 0;
-    }
-
 }

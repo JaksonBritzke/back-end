@@ -1,5 +1,6 @@
 package com.teste.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -7,6 +8,7 @@ import com.teste.model.Fornecedor;
 import com.teste.model.ItemNotaFiscal;
 import com.teste.model.NotaFiscal;
 import com.teste.model.Produto;
+import com.teste.model.dto.FornecedorDTO;
 import com.teste.model.dto.ItemNotaFiscalDTO;
 import com.teste.model.dto.NotaFiscalDTO;
 import com.teste.repository.FornecedorRepository;
@@ -17,6 +19,7 @@ import com.teste.service.NotaFiscalService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 
 @ApplicationScoped
@@ -47,55 +50,11 @@ public class NotaFiscalServiceImpl implements NotaFiscalService {
     @Transactional
     @Override
     public NotaFiscalDTO salvar(NotaFiscalDTO dto) {
+        validarCamposUnicos(dto);
         NotaFiscal nota = toNotaFiscal(dto);
         repository.persist(nota);
         return toDTO(nota);
     }
-
-@Transactional
-@Override
-public NotaFiscalDTO atualizar(NotaFiscalDTO dto) {
-    NotaFiscal existente = repository.findByNumeroOptional(dto.getNumero())
-            .orElseThrow(() -> new NotFoundException("Nota fiscal não encontrada"));
-
-    // Limpa os itens existentes
-    existente.getItens().clear();
-    
-    // Atualiza os dados da nota
-    existente.setDataEmissao(dto.getDataEmissao());
-    
-    // Busca o fornecedor usando Panache
-    Fornecedor fornecedor = fornecedorRepository.findById(dto.getFornecedorId());
-    if (fornecedor == null) {
-        throw new NotFoundException("Fornecedor não encontrado");
-    }
-    existente.setFornecedor(fornecedor);
-    existente.setValorTotal(dto.getValorTotal());
-    
-    // Adiciona os novos itens
-    if (dto.getItens() != null) {
-        dto.getItens().forEach(itemDTO -> {
-            ItemNotaFiscal item = new ItemNotaFiscal();
-            
-            // Busca o produto
-            Produto produto = produtoRepository.findById(itemDTO.getProdutoId());
-            if (produto == null) {
-                throw new NotFoundException("Produto não encontrado");
-            }
-            item.setProduto(produto);
-            
-            item.setQuantidade(itemDTO.getQuantidade());
-            item.setValorUnitario(itemDTO.getValorUnitario());
-            item.setValorTotal(itemDTO.getValorTotal());
-            item.setNotaFiscal(existente);
-            existente.getItens().add(item);
-        });
-    }
-
-    repository.persist(existente);
-    return toDTO(existente);
-}
-
     @Transactional
     @Override
     public void deletar(long numero) {
@@ -103,30 +62,56 @@ public NotaFiscalDTO atualizar(NotaFiscalDTO dto) {
                 .orElseThrow(() -> new NotFoundException("Nota fiscal não encontrada"));
         repository.delete(nota);
     }
-
+    
+    @Transactional
+    @Override
+    public NotaFiscalDTO atualizar(NotaFiscalDTO dto) {
+        NotaFiscal existente = repository.findByNumeroOptional(dto.getNumero())
+                .orElseThrow(() -> new NotFoundException("Nota fiscal não encontrada"));
+    
+        // Limpa todos os itens existentes
+        existente.getItens().clear();
+        repository.persist(existente);
+    
+        // Atualiza a nota com os novos dados
+        atualizarNota(existente, dto);
+        repository.persist(existente);
+        return toDTO(existente);
+    }
+    
     private void atualizarNota(NotaFiscal existente, NotaFiscalDTO dto) {
         existente.setDataEmissao(dto.getDataEmissao());
-        existente.setFornecedor(fornecedorRepository.findById(dto.getFornecedorId()));
-        existente.setValorTotal(dto.getValorTotal());
         existente.setNumero(dto.getNumero());
-
-        // Limpar itens existentes
-        existente.getItens().clear();
-
-        // Adicionar novos itens
-        existente.setItens(
-                dto.getItens().stream()
-                        .map(itemDto -> {
-                            ItemNotaFiscal item = new ItemNotaFiscal();
-                            item.setId(itemDto.getId());
-                            item.setProduto(produtoRepository.findById(itemDto.getProdutoId()));
-                            item.setValorUnitario(itemDto.getValorUnitario());
-                            item.setQuantidade(itemDto.getQuantidade());
-                            item.setValorTotal(itemDto.getValorTotal());
-                            item.setNotaFiscal(existente);
-                            return item;
-                        })
-                        .collect(Collectors.toList()));
+        existente.setValorTotal(dto.getValorTotal());
+        
+        Fornecedor fornecedor = fornecedorRepository.findById(dto.getFornecedorId());
+        if (fornecedor == null) {
+            throw new NotFoundException("Fornecedor não encontrado");
+        }
+        existente.setFornecedor(fornecedor);
+    
+        if (dto.getItens() != null && !dto.getItens().isEmpty()) {
+            List<ItemNotaFiscal> novosItens = new ArrayList<>();
+            
+            for (ItemNotaFiscalDTO itemDto : dto.getItens()) {
+                ItemNotaFiscal item = new ItemNotaFiscal();
+                
+                Produto produto = produtoRepository.findById(itemDto.getProdutoId());
+                if (produto == null) {
+                    throw new NotFoundException("Produto não encontrado: " + itemDto.getProdutoId());
+                }
+                
+                item.setProduto(produto);
+                item.setValorUnitario(itemDto.getValorUnitario());
+                item.setQuantidade(itemDto.getQuantidade());
+                item.setValorTotal(itemDto.getValorTotal());
+                item.setNotaFiscal(existente);
+                
+                novosItens.add(item);
+            }
+            
+            existente.getItens().addAll(novosItens);
+        }
     }
 
     private NotaFiscalDTO toDTO(NotaFiscal nota) {
@@ -171,5 +156,11 @@ public NotaFiscalDTO atualizar(NotaFiscalDTO dto) {
                 item.getValorUnitario(),
                 item.getQuantidade(),
                 item.getValorTotal());
+    }
+
+        private void validarCamposUnicos(NotaFiscalDTO dto) {
+        if (repository.count("numero", dto.getNumero()) > 0) {
+            throw new BadRequestException("Esse número de nota já existe cadastrado");
+        }
     }
 }

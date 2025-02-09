@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -22,7 +23,8 @@ public class NotaFiscal {
     @Id
     @GeneratedValue
     private Long id;
-
+    
+    @Column(unique = true)
     private Long numero;
 
     private LocalDateTime dataEmissao;
@@ -32,6 +34,6 @@ public class NotaFiscal {
 
     private BigDecimal valorTotal;
 
-    @OneToMany(mappedBy = "notaFiscal", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "notaFiscal", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemNotaFiscal> itens;
 }

@@ -17,4 +17,6 @@ public class NotaFiscalRepository implements PanacheRepository<NotaFiscal> {
     public Optional<NotaFiscal> findByNumeroOptional(Long numero) {
         return find("numero", numero).firstResultOptional();
     }
+
+
 }
