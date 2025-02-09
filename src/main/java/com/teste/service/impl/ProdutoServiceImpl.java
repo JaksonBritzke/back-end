@@ -3,6 +3,7 @@ package com.teste.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.teste.exception.ValidationException;
 import com.teste.model.Produto;
 import com.teste.model.dto.ProdutoDTO;
 import com.teste.repository.ProdutoRepository;
@@ -35,9 +36,20 @@ public class ProdutoServiceImpl implements ProdutoService {
     @Transactional
     @Override
     public ProdutoDTO salvar(ProdutoDTO dto) {
+        validarCamposObrigatorios(dto);
         Produto produto = toProduto(dto);
         repository.persist(produto);
         return toDTO(produto);
+    }
+
+    private void validarCamposObrigatorios(ProdutoDTO dto) {
+        if (dto.getDescricao() == null || dto.getDescricao().trim().isEmpty()) {
+            throw new ValidationException("A descrição do produto é obrigatória");
+        }
+
+        if (dto.getSituacao() == null) {
+            throw new ValidationException("A situação do produto é obrigatória");
+        }
     }
 
     @Transactional
@@ -76,7 +88,7 @@ public class ProdutoServiceImpl implements ProdutoService {
     @Override
     public ProdutoDTO buscarPorDescricao(String descricao) {
         return toDTO(repository.findByDescricao(descricao)
-        .orElseThrow(() -> new NotFoundException("Produto não encontrado")));
+                .orElseThrow(() -> new NotFoundException("Produto não encontrado")));
     }
 
     @Override
@@ -91,7 +103,7 @@ public class ProdutoServiceImpl implements ProdutoService {
         }
 
         return produtos.stream()
-                       .map(this::toDTO)
-                       .collect(Collectors.toList());
+                .map(this::toDTO)
+                .collect(Collectors.toList());
     }
 }

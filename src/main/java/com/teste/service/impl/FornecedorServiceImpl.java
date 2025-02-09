@@ -3,6 +3,7 @@ package com.teste.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.teste.exception.ValidationException;
 import com.teste.model.Fornecedor;
 import com.teste.model.dto.FornecedorDTO;
 import com.teste.repository.FornecedorRepository;
@@ -10,6 +11,7 @@ import com.teste.service.FornecedorService;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.persistence.PersistenceException;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
@@ -35,10 +37,18 @@ public class FornecedorServiceImpl implements FornecedorService {
     @Transactional
     @Override
     public FornecedorDTO salvar(FornecedorDTO dto) {
-        validarCamposUnicos(dto);
-        Fornecedor fornecedor = toFornecedor(dto);
-        repository.persist(fornecedor);
-        return toDTO(fornecedor);
+        try {
+            if (dto.getRazaoSocial() == null || dto.getRazaoSocial().trim().isEmpty()) {
+                throw new ValidationException("A descrição é obrigatória");
+            }
+
+            validarCamposUnicos(dto);
+            Fornecedor fornecedor = toFornecedor(dto);
+            repository.persist(fornecedor);
+            return toDTO(fornecedor);
+        } catch (PersistenceException e) {
+            throw new ValidationException("Erro ao salvar fornecedor: " + e.getMessage());
+        }
     }
 
     @Transactional
