@@ -130,22 +130,36 @@ public class NotaFiscalServiceImpl implements NotaFiscalService {
         NotaFiscal nota = new NotaFiscal();
         nota.setNumero(dto.getNumero());
         nota.setDataEmissao(dto.getDataEmissao());
-        nota.setFornecedor(fornecedorRepository.findById(dto.getFornecedorId()));
+        
+        Fornecedor fornecedor = fornecedorRepository.findById(dto.getFornecedorId());
+        if (fornecedor == null) {
+            throw new NotFoundException("Fornecedor não encontrado");
+        }
+        nota.setFornecedor(fornecedor);
         nota.setValorTotal(dto.getValorTotal());
-
-        nota.setItens(
+    
+        if (dto.getItens() != null && !dto.getItens().isEmpty()) {
+            nota.setItens(
                 dto.getItens().stream()
-                        .map(itemDto -> {
-                            ItemNotaFiscal item = new ItemNotaFiscal();
-                            item.setId(itemDto.getId());
-                            item.setProduto(produtoRepository.findById(itemDto.getProdutoId()));
-                            item.setValorUnitario(itemDto.getValorUnitario());
-                            item.setQuantidade(itemDto.getQuantidade());
-                            item.setNotaFiscal(nota);
-                            return item;
-                        })
-                        .collect(Collectors.toList()));
-
+                    .map(itemDto -> {
+                        ItemNotaFiscal item = new ItemNotaFiscal();
+                        // Removemos o setId pois é um novo item
+                        
+                        Produto produto = produtoRepository.findById(itemDto.getProdutoId());
+                        if (produto == null) {
+                            throw new NotFoundException("Produto não encontrado: " + itemDto.getProdutoId());
+                        }
+                        
+                        item.setProduto(produto);
+                        item.setValorUnitario(itemDto.getValorUnitario());
+                        item.setQuantidade(itemDto.getQuantidade());
+                        item.setValorTotal(itemDto.getValorTotal());
+                        item.setNotaFiscal(nota);
+                        return item;
+                    })
+                    .collect(Collectors.toList()));
+        }
+    
         return nota;
     }
 
