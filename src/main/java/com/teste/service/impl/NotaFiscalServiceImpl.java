@@ -143,7 +143,6 @@ public class NotaFiscalServiceImpl implements NotaFiscalService {
                 dto.getItens().stream()
                     .map(itemDto -> {
                         ItemNotaFiscal item = new ItemNotaFiscal();
-                        // Removemos o setId pois é um novo item
                         
                         Produto produto = produtoRepository.findById(itemDto.getProdutoId());
                         if (produto == null) {
