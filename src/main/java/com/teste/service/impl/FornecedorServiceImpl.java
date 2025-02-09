@@ -83,8 +83,8 @@ public class FornecedorServiceImpl implements FornecedorService {
                 dto.getCodigo(),
                 dto.getRazaoSocial(),
                 dto.getEmail(),
-                dto.getTelefone(),
                 dto.getEndereco(),
+                dto.getTelefone(),
                 dto.getCnpj(),
                 dto.getSituacao(),
                 dto.getDataBaixa());
