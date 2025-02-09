@@ -1,4 +1,4 @@
-# Projeto Front-end Angular 19
+# Projeto Back-end 
 
 **Importante**: Esta aplicação depende do Backend desenvolvido em Quarkus estar em execução.
 
