@@ -29,13 +29,13 @@ https://github.com/JaksonBritzke/back-end.git
 3. Execute o comando:
 
 ```bash
-mvn clean install
+./mvn clean install
 ```
 
 4. Para iniciar a aplicação em modo de desenvolvimento:
 
 ```bash
-mvn quarkus:dev
+ ./mvnw quarkus:dev 
 ```
 
 A aplicação estará disponível em `http://localhost:8080`
@@ -65,7 +65,7 @@ O backend está configurado para aceitar requisições do frontend Angular que r
 Para executar os testes:
 
 ```bash
-mvn test
+./mvn test
 ```
 
 ## Health Check
@@ -73,7 +73,7 @@ mvn test
 Endpoint de verificação de saúde disponível em:
 - `http://localhost:8080/q/health`
 
-Para fins de visualização com dados logo ao rodar a aplicação, segue scripts SQL:
+Para fins de visualização com dados, logo ao rodar a aplicação, executar os scripts abaixo no Banco de Dados criado anteriormente:
 
 ## Dados de Exemplo
 
