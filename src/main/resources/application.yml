@@ -1,0 +1,26 @@
+quarkus:
+  datasource:
+    db-kind: postgresql
+    username: postgres
+    password: postgres
+    jdbc:
+      url: jdbc:postgresql://localhost:5432/bd_teste
+  hibernate-orm:
+    database:
+      generation: update
+  
+  # Configurações do Swagger
+  swagger-ui:
+    always-include: true
+    path: /swagger-ui
+  
+  # Configurações CORS
+  http:
+    cors:
+      ~: true
+      origins: http://localhost:4200
+      methods: GET,PUT,POST,DELETE,OPTIONS
+      headers: accept,authorization,content-type,x-requested-with
+      exposed-headers: content-disposition
+      access-control-max-age: 24H
+      access-control-allow-credentials: true
