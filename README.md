@@ -1,85 +1,97 @@
-# teste-ids
+# Projeto Backend Quarkus
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+Este projeto foi desenvolvido utilizando Quarkus 3.18.2, PostgreSQL 16.6 e Java 17.
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+## Pré-requisitos
 
-## Running the application in dev mode
+Antes de começar, certifique-se de ter instalado em sua máquina:
 
-You can run your application in dev mode that enables live coding using:
+- Java 17 (OpenJDK)
+- Apache Maven 3.9.1
+- PostgreSQL 16.6
+- IDE de sua preferência (recomendado VSCode ou IntelliJ IDEA)
 
-```shell script
-./mvnw quarkus:dev
+## Configuração do Banco de Dados
+
+1. Instale o PostgreSQL 16.6
+2. Crie um banco de dados chamado `bd_teste`
+3. Configure o usuário e senha como:
+   - Usuário: postgres
+   - Senha: postgres
+
+Ou altere as configurações no arquivo `application.properties` de acordo com sua instalação.
+
+## Instalação e Execução
+
+1. Clone o repositório do projeto
+2. Navegue até a pasta do projeto
+3. Execute o comando:
+
+```bash
+mvn clean install
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+4. Para iniciar a aplicação em modo de desenvolvimento:
 
-## Packaging and running the application
-
-The application can be packaged using:
-
-```shell script
-./mvnw package
+```bash
+mvn quarkus:dev
 ```
 
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+A aplicação estará disponível em `http://localhost:8080`
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
+## Endpoints e Documentação
 
-If you want to build an _über-jar_, execute the following command:
+A documentação Swagger UI está disponível em:
+- `http://localhost:8080/swagger-ui`
 
-```shell script
-./mvnw package -Dquarkus.package.jar.type=uber-jar
+## Principais Dependências
+
+O projeto utiliza as seguintes dependências principais:
+
+- Quarkus 3.18.2
+- Hibernate ORM com Panache
+- RESTEasy
+- PostgreSQL JDBC Driver
+- Swagger UI
+- Lombok 1.18.30
+
+## Configurações CORS
+
+O backend está configurado para aceitar requisições do frontend Angular que roda em `http://localhost:4200`
+
+## Health Check
+
+Endpoint de verificação de saúde disponível em:
+- `http://localhost:8080/q/health`
+
+## Desenvolvimento
+
+- O projeto usa Java 17
+- Hibernate ORM com modo de geração de banco de dados em `update`
+- Swagger UI sempre incluído
+- CORS configurado para desenvolvimento local
+
+## Build
+
+Para gerar um build de produção:
+
+```bash
+mvn package
 ```
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
+Para gerar um build nativo:
 
-## Creating a native executable
-
-You can create a native executable using:
-
-```shell script
-./mvnw package -Dnative
+```bash
+mvn package -Pnative
 ```
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
+## Testes
 
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
+Para executar os testes:
+
+```bash
+mvn test
 ```
 
-You can then execute your native executable with: `./target/teste-ids-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
-
-## Related Guides
-
-- SmallRye OpenAPI ([guide](https://quarkus.io/guides/openapi-swaggerui)): Document your REST APIs with OpenAPI - comes with Swagger UI
-- Hibernate ORM with Panache ([guide](https://quarkus.io/guides/hibernate-orm-panache)): Simplify your persistence code for Hibernate ORM via the active record or the repository pattern
-- RESTEasy Classic ([guide](https://quarkus.io/guides/resteasy)): REST endpoint framework implementing Jakarta REST and more
-- SmallRye Health ([guide](https://quarkus.io/guides/smallrye-health)): Monitor service health
-- JDBC Driver - PostgreSQL ([guide](https://quarkus.io/guides/datasource)): Connect to the PostgreSQL database via JDBC
-
-## Provided Code
-
-### Hibernate ORM
-
-Create your first JPA entity
-
-[Related guide section...](https://quarkus.io/guides/hibernate-orm)
-
-[Related Hibernate with Panache section...](https://quarkus.io/guides/hibernate-orm-panache)
-
-
-### RESTEasy JAX-RS
-
-Easily start your RESTful Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started#the-jax-rs-resources)
-
-### SmallRye Health
-
-Monitor your application's health using SmallRye Health
-
-[Related guide section...](https://quarkus.io/guides/smallrye-health)
+---
+*Observação: Certifique-se de que o PostgreSQL esteja em execução antes de iniciar a aplicação.*
