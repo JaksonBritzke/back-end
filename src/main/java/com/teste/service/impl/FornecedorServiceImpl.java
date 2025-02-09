@@ -61,7 +61,7 @@ public class FornecedorServiceImpl implements FornecedorService {
     public void deletar(Long id) {
         if (repository.temMovimentacao(id)) {
             throw new BadRequestException(
-                    "Este Fornecedor já possui vinculo com uma Nota Fiscal, portando não poderá ser excluído");
+                    "Este Fornecedor já possui vinculo com uma Nota Fiscal, portanto não poderá ser excluído");
         }
         repository.deleteById(id);
     }
