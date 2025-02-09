@@ -3,8 +3,10 @@ package com.teste.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.teste.model.Fornecedor;
 import com.teste.model.ItemNotaFiscal;
 import com.teste.model.NotaFiscal;
+import com.teste.model.Produto;
 import com.teste.model.dto.ItemNotaFiscalDTO;
 import com.teste.model.dto.NotaFiscalDTO;
 import com.teste.repository.FornecedorRepository;
@@ -50,16 +52,49 @@ public class NotaFiscalServiceImpl implements NotaFiscalService {
         return toDTO(nota);
     }
 
-    @Transactional
-    @Override
-    public NotaFiscalDTO atualizar(NotaFiscalDTO dto) {
-        NotaFiscal existente = repository.findByNumeroOptional(dto.getNumero())
-                .orElseThrow(() -> new NotFoundException("Nota fiscal não encontrada"));
+@Transactional
+@Override
+public NotaFiscalDTO atualizar(NotaFiscalDTO dto) {
+    NotaFiscal existente = repository.findByNumeroOptional(dto.getNumero())
+            .orElseThrow(() -> new NotFoundException("Nota fiscal não encontrada"));
 
-        atualizarNota(existente, dto);
-        repository.persist(existente);
-        return toDTO(existente);
+    // Limpa os itens existentes
+    existente.getItens().clear();
+    
+    // Atualiza os dados da nota
+    existente.setDataEmissao(dto.getDataEmissao());
+    
+    // Busca o fornecedor usando Panache
+    Fornecedor fornecedor = fornecedorRepository.findById(dto.getFornecedorId());
+    if (fornecedor == null) {
+        throw new NotFoundException("Fornecedor não encontrado");
     }
+    existente.setFornecedor(fornecedor);
+    existente.setValorTotal(dto.getValorTotal());
+    
+    // Adiciona os novos itens
+    if (dto.getItens() != null) {
+        dto.getItens().forEach(itemDTO -> {
+            ItemNotaFiscal item = new ItemNotaFiscal();
+            
+            // Busca o produto
+            Produto produto = produtoRepository.findById(itemDTO.getProdutoId());
+            if (produto == null) {
+                throw new NotFoundException("Produto não encontrado");
+            }
+            item.setProduto(produto);
+            
+            item.setQuantidade(itemDTO.getQuantidade());
+            item.setValorUnitario(itemDTO.getValorUnitario());
+            item.setValorTotal(itemDTO.getValorTotal());
+            item.setNotaFiscal(existente);
+            existente.getItens().add(item);
+        });
+    }
+
+    repository.persist(existente);
+    return toDTO(existente);
+}
 
     @Transactional
     @Override
