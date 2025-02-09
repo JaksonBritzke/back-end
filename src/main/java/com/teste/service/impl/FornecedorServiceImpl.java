@@ -43,8 +43,8 @@ public class FornecedorServiceImpl implements FornecedorService {
 
     @Transactional
     @Override
-    public FornecedorDTO atualizar(Long id, FornecedorDTO dto) {
-        Fornecedor existente = repository.findByIdOptional(id)
+    public FornecedorDTO atualizar(FornecedorDTO dto) {
+        Fornecedor existente = repository.findByIdOptional(dto.getCodigo())
                 .orElseThrow(() -> new NotFoundException("Fornecedor não encontrado"));
         existente.setCnpj(dto.getCnpj());
         existente.setDataBaixa(dto.getDataBaixa());
@@ -71,8 +71,8 @@ public class FornecedorServiceImpl implements FornecedorService {
                 fornecedor.getCodigo(),
                 fornecedor.getRazaoSocial(),
                 fornecedor.getEmail(),
-                fornecedor.getTelefone(),
                 fornecedor.getEndereco(),
+                fornecedor.getTelefone(),
                 fornecedor.getCnpj(),
                 fornecedor.getSituacao(),
                 fornecedor.getDataBaixa());

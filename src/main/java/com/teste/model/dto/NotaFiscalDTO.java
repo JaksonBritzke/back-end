@@ -16,6 +16,7 @@ public class NotaFiscalDTO {
     private Long numero;
     private LocalDateTime dataEmissao;
     private Long fornecedorId;
+    private String fornecedorNome;
     private BigDecimal valorTotal;
     private List<ItemNotaFiscalDTO> itens;
 }

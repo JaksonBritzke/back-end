@@ -58,9 +58,9 @@ public class FornecedorController {
     }
 
     @PUT
-    @Path("/{id}")
-    public FornecedorDTO atualizar(@PathParam("id") Long id, FornecedorDTO dto) {
-        return service.atualizar(id, dto);
+    @Path("/")
+    public FornecedorDTO atualizar(FornecedorDTO dto) {
+        return service.atualizar(dto);
     }
 
     @DELETE

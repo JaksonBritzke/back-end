@@ -15,7 +15,7 @@ public interface FornecedorService {
 
     FornecedorDTO salvar(FornecedorDTO dto);
 
-    FornecedorDTO atualizar(Long id, FornecedorDTO dto);
+    FornecedorDTO atualizar(FornecedorDTO dto);
 
     void deletar(Long id);
 }
